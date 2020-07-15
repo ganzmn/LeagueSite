@@ -18,14 +18,14 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     messages: [],
-    token: localStorage.getItem('token') || ''
+    token: localStorage.getItem('token') || '',
+    userProfile: []
   },
   mutations: {
     updateMessages (state, messages) {
       state.messages = messages
     },
     newMessage (state, message) {
-      console.log(message)
       state.messages.push(message)
     },
     auth (state, token) {
@@ -34,6 +34,9 @@ export default new Vuex.Store({
     logout (state) {
       state.token = ''
       localStorage.clear('token')
+    },
+    userProfile (state, userProfile) {
+      state.userProfile = userProfile
     }
   },
   actions: {
@@ -58,6 +61,14 @@ export default new Vuex.Store({
       localStorage.setItem('token', token)
       axios.defaults.headers.common.Authorization = token
       commit('auth', token)
+      const userProfile = (await axios.get('http://localhost:3000/userProfile', token)).data
+      commit('userProfile', userProfile)
+    },
+    async getUserProfile ({ commit }, userToken) {
+      axios.defaults.headers.common.Authorization = userToken
+      console.log(userToken)
+      const userProfile = (await axios.get('http://localhost:3000/userProfile', userToken)).data
+      commit('userProfile', userProfile)
     }
   }
 })

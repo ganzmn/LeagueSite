@@ -1,6 +1,5 @@
 <template>
-  <div>
-    <q-card>
+    <q-card v-if="$store.state.token" style="width: 95%">
       <q-card-section>
         <div class="text-h6">Locker Room</div>
       </q-card-section>
@@ -10,11 +9,11 @@
         :bar-style="barStyle"
         class="q-pa-md"
         ref="chatScroll"
-        style="height: 400px; width: 400px">
+        style="height: 300px; width: 100%">
           <q-chat-message
             v-bind:key="message.id"
             v-for="message in this.$store.state.messages"
-            :name="message.user.userName"
+            :name="message.user.firstName"
             :text="message.messageBody"
             :sent="message.user.id == user"
           />
@@ -31,7 +30,6 @@
       </q-input>
       </q-card-section>
     </q-card>
-  </div>
 </template>
 
 <script>
@@ -59,10 +57,12 @@ export default {
     }
   },
   async created () {
-    this.$store.dispatch('getMessages').then(() => {
-      this.updateScroll()
-    })
-    this.user = localStorage.getItem('token')
+    if (this.$store.state.token) {
+      this.$store.dispatch('getMessages').then(() => {
+        this.updateScroll()
+      })
+      this.user = localStorage.getItem('token')
+    }
   },
   methods: {
     async submitMessage () {
@@ -76,7 +76,6 @@ export default {
     },
     async updateScroll () {
       const scrollArea = this.$refs.chatScroll
-      console.log(scrollArea)
       const scrollTarget = scrollArea.getScrollTarget()
       const duration = 300
       scrollArea.setScrollPosition(scrollTarget.scrollHeight, duration)

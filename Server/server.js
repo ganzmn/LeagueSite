@@ -49,8 +49,6 @@ app.post('/messages', (req, res) => {
   const userId = jwt.decode(token, '123')
   const user = users[userId]
   const msg = req.body
-  console.log(userId)
-  console.log(users)
   msg.user = user
   msg.user.id = token
   msg.id = messages[messages.length - 1].id + 1
@@ -93,6 +91,13 @@ app.get('/teamGameRecords', (req, res) => {
 })
 
 // player mgmt
+app.get('/userProfile', (req, res) => {
+  const token = req.header('Authorization')
+  const userId = jwt.decode(token, '123')
+  const user = users[userId]
+  const userProfile = { user: { name: user.firstName + ' ' + user.lastName, bootsChamp: user.bootsChamps, bootsHof: user.bootsHof } }
+  res.send(userProfile)
+})
 app.get('/players', (req, res) => {
   res.send(users)
 })

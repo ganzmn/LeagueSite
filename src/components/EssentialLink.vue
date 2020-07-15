@@ -3,7 +3,7 @@
     clickable
     tag="a"
     target="_blank"
-    :href="link"
+    @click="goTo"
   >
     <q-item-section
       v-if="icon"
@@ -35,14 +35,19 @@ export default {
       default: ''
     },
 
-    link: {
+    route: {
       type: String,
-      default: '#'
+      default: '/'
     },
 
     icon: {
       type: String,
       default: ''
+    }
+  },
+  methods: {
+    async goTo () {
+      this.$router.push(this.route)
     }
   }
 }

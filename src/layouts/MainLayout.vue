@@ -11,7 +11,7 @@
           @click="leftDrawerOpen = !leftDrawerOpen"
         />
 
-        <q-toolbar-title>
+        <q-toolbar-title @click="$router.push('/')">
           GNL
         </q-toolbar-title>
 
@@ -78,10 +78,9 @@ export default {
       leftDrawerOpen: false,
       essentialLinks: [
         {
-          title: 'Docs',
-          caption: 'quasar.dev',
-          icon: 'school',
-          link: 'https://quasar.dev'
+          title: 'Profile',
+          icon: 'person',
+          route: '/profile'
         },
         {
           title: 'Github',
